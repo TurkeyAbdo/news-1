@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Builds
+.next/
+out/
+dist/
+build/
+**/dist/
+**/build/
+**/.next/
+
+# Strapi
+.strapi/
+**/.strapi/
+.cache/
+**/.cache/
+.strapi-updater.json
+exports/
+*.cache
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Claude Code local settings
+.claude/
