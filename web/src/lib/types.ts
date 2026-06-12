@@ -56,10 +56,13 @@ export interface Video {
   thumbnail: string;
   duration: string;
   publishedAt: string;
+  videoUrl?: string; // external URL (e.g. YouTube)
+  videoFile?: string; // uploaded video file URL
 }
 
 export interface HappeningNowItem {
   id: number;
   text: string;
   time: string; // HH:MM
+  link?: string; // optional redirect to the live broadcast
 }

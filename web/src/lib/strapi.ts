@@ -51,6 +51,12 @@ function mediaUrl(media: StrapiMedia | null | undefined, seed: string): string {
   return placeholder(seed);
 }
 
+/** Absolute media URL, or undefined when no file is attached (no placeholder). */
+function optMediaUrl(media: StrapiMedia | null | undefined): string | undefined {
+  if (!media?.url) return undefined;
+  return media.url.startsWith("http") ? media.url : `${STRAPI_URL}${media.url}`;
+}
+
 /** Pass Strapi blocks content through, guarding against non-array values. */
 function asRichBody(blocks: unknown): RichBody {
   return (Array.isArray(blocks) ? blocks : []) as RichBody;
@@ -81,12 +87,15 @@ interface RawDoc {
   publishedAt: string;
   coverImage?: StrapiMedia | null;
   thumbnail?: StrapiMedia | null;
+  videoUrl?: string;
+  videoFile?: StrapiMedia | null;
 }
 
 interface RawHappening {
   id: number;
   text: string;
   publishedAt: string;
+  link?: string;
 }
 
 /* ----------------------------- mappers ------------------------------- */
@@ -130,6 +139,8 @@ function mapVideo(r: RawDoc): Video {
     thumbnail: mediaUrl(r.thumbnail, r.slug),
     duration: r.duration ?? "",
     publishedAt: r.publishedAt,
+    videoUrl: r.videoUrl || undefined,
+    videoFile: optMediaUrl(r.videoFile),
   };
 }
 
@@ -138,7 +149,7 @@ function mapHappening(r: RawHappening): HappeningNowItem {
   const time = `${String(d.getHours()).padStart(2, "0")}:${String(
     d.getMinutes()
   ).padStart(2, "0")}`;
-  return { id: r.id, text: r.text, time };
+  return { id: r.id, text: r.text, time, link: r.link || undefined };
 }
 
 /* --------------------------- public API ------------------------------ */
@@ -147,14 +158,14 @@ const SORT_DESC = "sort=publishedAt:desc";
 
 export async function getLatestArticles(n = 12): Promise<Article[]> {
   const res = await strapiFetch<RawArticle[]>(
-    `/articles?populate=category&${SORT_DESC}&pagination[pageSize]=${n}`
+    `/articles?populate[0]=category&populate[1]=coverImage&${SORT_DESC}&pagination[pageSize]=${n}`
   );
   return (res?.data ?? []).map(mapArticle);
 }
 
 export async function getFeaturedArticle(): Promise<Article | null> {
   const res = await strapiFetch<RawArticle[]>(
-    `/articles?populate=category&filters[featured][$eq]=true&pagination[pageSize]=1`
+    `/articles?populate[0]=category&populate[1]=coverImage&filters[featured][$eq]=true&pagination[pageSize]=1`
   );
   if (res?.data?.length) return mapArticle(res.data[0]);
   // fallback to most recent
@@ -167,14 +178,14 @@ export async function getArticlesByCategory(
   n = 20
 ): Promise<Article[]> {
   const res = await strapiFetch<RawArticle[]>(
-    `/articles?populate=category&filters[category][slug][$eq]=${slug}&${SORT_DESC}&pagination[pageSize]=${n}`
+    `/articles?populate[0]=category&populate[1]=coverImage&filters[category][slug][$eq]=${slug}&${SORT_DESC}&pagination[pageSize]=${n}`
   );
   return (res?.data ?? []).map(mapArticle);
 }
 
 export async function getArticleBySlug(slug: string): Promise<Article | null> {
   const res = await strapiFetch<RawArticle[]>(
-    `/articles?populate=category&filters[slug][$eq]=${slug}&pagination[pageSize]=1`
+    `/articles?populate[0]=category&populate[1]=coverImage&filters[slug][$eq]=${slug}&pagination[pageSize]=1`
   );
   return res?.data?.length ? mapArticle(res.data[0]) : null;
 }
@@ -182,7 +193,7 @@ export async function getArticleBySlug(slug: string): Promise<Article | null> {
 export async function getMostRead(n = 6): Promise<Article[]> {
   // Sort by real view counts (incremented when an article is opened).
   const res = await strapiFetch<RawArticle[]>(
-    `/articles?populate=category&sort=views:desc&pagination[pageSize]=${n}`
+    `/articles?populate[0]=category&populate[1]=coverImage&sort=views:desc&pagination[pageSize]=${n}`
   );
   const items = res?.data ?? [];
   // Fall back to latest if nobody has any views yet.
@@ -195,7 +206,7 @@ export async function searchArticles(q: string): Promise<Article[]> {
   if (!term) return [];
   const enc = encodeURIComponent(term);
   const res = await strapiFetch<RawArticle[]>(
-    `/articles?populate=category&filters[$or][0][title][$containsi]=${enc}&filters[$or][1][excerpt][$containsi]=${enc}&pagination[pageSize]=30`
+    `/articles?populate[0]=category&populate[1]=coverImage&filters[$or][0][title][$containsi]=${enc}&filters[$or][1][excerpt][$containsi]=${enc}&pagination[pageSize]=30`
   );
   return (res?.data ?? []).map(mapArticle);
 }
@@ -232,14 +243,14 @@ export async function getInvestigationBySlug(
 
 export async function getVideos(n = 12): Promise<Video[]> {
   const res = await strapiFetch<RawDoc[]>(
-    `/videos?populate=thumbnail&${SORT_DESC}&pagination[pageSize]=${n}`
+    `/videos?populate[0]=thumbnail&populate[1]=videoFile&${SORT_DESC}&pagination[pageSize]=${n}`
   );
   return (res?.data ?? []).map(mapVideo);
 }
 
 export async function getVideoBySlug(slug: string): Promise<Video | null> {
   const res = await strapiFetch<RawDoc[]>(
-    `/videos?populate=thumbnail&filters[slug][$eq]=${slug}&pagination[pageSize]=1`
+    `/videos?populate[0]=thumbnail&populate[1]=videoFile&filters[slug][$eq]=${slug}&pagination[pageSize]=1`
   );
   return res?.data?.length ? mapVideo(res.data[0]) : null;
 }

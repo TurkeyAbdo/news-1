@@ -15,6 +15,9 @@
     "text": {
       "type": "text",
       "required": true
+    },
+    "link": {
+      "type": "string"
     }
   }
 }

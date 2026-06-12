@@ -37,6 +37,20 @@ export default async function HappeningNowPage() {
                     <p className="text-base font-semibold text-ink leading-7 mt-1">
                       {item.text}
                     </p>
+                    {item.link && (
+                      <a
+                        href={item.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 mt-3 bg-brand text-white text-sm font-bold px-4 py-2 rounded-full hover:bg-brand-dark transition"
+                      >
+                        <span className="relative flex h-2 w-2">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
+                          <span className="relative inline-flex rounded-full h-2 w-2 bg-white" />
+                        </span>
+                        شاهد البث المباشر ↗
+                      </a>
+                    )}
                   </div>
                 </li>
               ))}

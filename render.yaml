@@ -44,6 +44,14 @@ services:
         value: "true"
       - key: STRAPI_TELEMETRY_DISABLED
         value: "true"
+      # Cloudinary media storage — set these in the Render dashboard so uploads
+      # persist (Render's disk is wiped on restart). From cloudinary.com/console.
+      - key: CLOUDINARY_NAME
+        sync: false
+      - key: CLOUDINARY_KEY
+        sync: false
+      - key: CLOUDINARY_SECRET
+        sync: false
       # Secrets — Render generates secure random values automatically
       - key: APP_KEYS
         generateValue: true

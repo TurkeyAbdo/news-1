@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { CATEGORIES } from "@/lib/categories";
 import type { HappeningNowItem } from "@/lib/types";
@@ -32,9 +33,14 @@ export default function Header({ ticker = [] }: { ticker?: HappeningNowItem[] })
               خدماتنا
             </Link>
             <span className="hidden sm:flex items-center gap-3 text-gray-300">
-              <span className="hover:text-white cursor-pointer">فيسبوك</span>
-              <span className="hover:text-white cursor-pointer">إكس</span>
-              <span className="hover:text-white cursor-pointer">يوتيوب</span>
+              <a
+                href="https://www.facebook.com/profile.php?id=61567372347140"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-white"
+              >
+                فيسبوك
+              </a>
             </span>
           </div>
         </div>
@@ -43,16 +49,15 @@ export default function Header({ ticker = [] }: { ticker?: HappeningNowItem[] })
       {/* Logo + search bar */}
       <div className="border-b border-line">
         <div className="mx-auto max-w-7xl px-4 h-20 flex items-center justify-between gap-4">
-          <Link href="/" className="flex items-center gap-2">
-            <span className="bg-brand text-white font-black text-2xl px-3 py-1 rounded">
-              الوكالة
-            </span>
-            <span className="hidden sm:block text-ink font-bold text-lg leading-tight">
-              وكالة الأنباء
-              <span className="block text-xs font-normal text-muted">
-                أخبار · تقارير · تحقيقات
-              </span>
-            </span>
+          <Link href="/" className="flex items-center" aria-label="سيف نيوز">
+            <Image
+              src="/brand/seif-news-logo.png"
+              alt="سيف نيوز SEIF NEWS"
+              width={190}
+              height={59}
+              priority
+              className="h-12 w-auto"
+            />
           </Link>
 
           <form
@@ -157,11 +162,23 @@ export default function Header({ ticker = [] }: { ticker?: HappeningNowItem[] })
           </span>
           <div className="overflow-hidden flex-1">
             <div className="animate-ticker text-sm text-ink">
-              {ticker.map((h) => (
-                <span key={h.id} className="mx-6 inline-block">
-                  • {h.text}
-                </span>
-              ))}
+              {ticker.map((h) =>
+                h.link ? (
+                  <a
+                    key={h.id}
+                    href={h.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mx-6 inline-block hover:text-brand"
+                  >
+                    • {h.text} ↗
+                  </a>
+                ) : (
+                  <span key={h.id} className="mx-6 inline-block">
+                    • {h.text}
+                  </span>
+                )
+              )}
             </div>
           </div>
         </div>

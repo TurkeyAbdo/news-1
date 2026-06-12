@@ -89,7 +89,7 @@ export default async function ArticlePage({
 
         <div className="flex flex-wrap gap-2 mt-8 pt-6 border-t border-line">
           <span className="text-sm font-semibold text-muted">شارك:</span>
-          {["فيسبوك", "إكس", "واتساب"].map((s) => (
+          {["فيسبوك", "واتساب"].map((s) => (
             <span
               key={s}
               className="text-xs border border-line rounded-full px-3 py-1 hover:bg-surface cursor-pointer"

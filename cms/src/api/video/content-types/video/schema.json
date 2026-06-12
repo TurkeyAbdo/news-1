@@ -27,6 +27,12 @@
     "videoUrl": {
       "type": "string"
     },
+    "videoFile": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["videos"]
+    },
     "duration": {
       "type": "string"
     },

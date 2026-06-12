@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { CATEGORIES } from "@/lib/categories";
 
 const SECTIONS = [
@@ -14,9 +15,13 @@ export default function Footer() {
     <footer className="bg-ink text-gray-300 mt-12">
       <div className="mx-auto max-w-7xl px-4 py-12 grid gap-8 md:grid-cols-4">
         <div>
-          <span className="bg-brand text-white font-black text-xl px-3 py-1 rounded">
-            الوكالة
-          </span>
+          <Image
+            src="/brand/seif-news-logo-white.png"
+            alt="سيف نيوز SEIF NEWS"
+            width={180}
+            height={56}
+            className="h-11 w-auto"
+          />
           <p className="mt-4 text-sm leading-7 text-gray-400">
             موقع إخباري شامل يقدم تغطية دقيقة ومتوازنة لآخر الأخبار والتقارير
             والتحقيقات على المستويين المحلي والدولي.
@@ -61,16 +66,21 @@ export default function Footer() {
             <li><Link href="/terms" className="hover:text-white">شروط الاستخدام</Link></li>
           </ul>
           <div className="flex gap-3 mt-4 text-sm">
-            <span className="hover:text-white cursor-pointer">فيسبوك</span>
-            <span className="hover:text-white cursor-pointer">إكس</span>
-            <span className="hover:text-white cursor-pointer">يوتيوب</span>
+            <a
+              href="https://www.facebook.com/profile.php?id=61567372347140"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-white"
+            >
+              فيسبوك
+            </a>
           </div>
         </div>
       </div>
 
       <div className="border-t border-white/10">
         <div className="mx-auto max-w-7xl px-4 py-4 text-xs text-gray-500 flex flex-col sm:flex-row justify-between gap-2">
-          <span>© {year} وكالة الأنباء. جميع الحقوق محفوظة.</span>
+          <span>© {year} سيف نيوز SEIF NEWS. جميع الحقوق محفوظة.</span>
           <span>صُمم على غرار المواقع الإخبارية الكبرى</span>
         </div>
       </div>
