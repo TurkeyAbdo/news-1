@@ -2,9 +2,6 @@
 
 import { useEffect } from "react";
 
-const STRAPI_URL =
-  process.env.NEXT_PUBLIC_STRAPI_URL ?? "http://localhost:1337";
-
 /**
  * Registers a view for an article (fire-and-forget) when the page mounts.
  * Powers the real "most read" ranking.
@@ -12,8 +9,8 @@ const STRAPI_URL =
 export default function ViewTracker({ slug }: { slug: string }) {
   useEffect(() => {
     if (!slug) return;
-    fetch(`${STRAPI_URL}/api/articles/by-slug/${encodeURIComponent(slug)}/view`, {
-      method: "PUT",
+    fetch(`/api/articles/${encodeURIComponent(slug)}/view`, {
+      method: "POST",
       keepalive: true,
     }).catch(() => {
       /* non-critical — ignore failures */

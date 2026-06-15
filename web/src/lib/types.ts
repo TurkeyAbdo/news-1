@@ -1,6 +1,5 @@
-import type { BlocksContent } from "@strapi/blocks-react-renderer";
-
-export type RichBody = BlocksContent;
+// Article/report/investigation bodies are sanitized HTML strings.
+export type RichBody = string;
 
 export type CategorySlug =
   | "politics"
